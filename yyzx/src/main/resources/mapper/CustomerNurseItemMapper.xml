@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.yyzx.mapper.CustomerNurseItemMapper">
+    <resultMap id="BaseResultMap" type="com.neuedu.yyzx.vo.CustomerNurseItemVo">
+        <id column="id" property="id" />
+        <result column="item_id" property="itemId" />
+        <result column="customer_id" property="customerId" />
+        <result column="level_id" property="levelId" />
+        <result column="nurse_number" property="nurseNumber" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="buy_time" property="buyTime" />
+        <result column="maturity_time" property="maturityTime" />
+        <result column="customer_name" property="customerName" />
+        <result column="serial_number" property="serialNumber" />
+        <result column="nursing_name" property="nursingName" />
+        <result column="service_price" property="servicePrice" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, customer_id, item_id, level_id, nurse_number, is_deleted, buy_time, maturity_time, customer_name, serial_number, nursing_name, service_price
+    </sql>
+
+    <select id="selectCustomerNurseItemVo" resultType="com.neuedu.yyzx.vo.CustomerNurseItemVo">
+        SELECT
+            cni.id,
+            cni.item_id,
+            cni.customer_id,
+            cni.level_id,
+            cni.nurse_number,
+            cni.is_deleted,
+            cni.buy_time,
+            cni.maturity_time,
+            c.customer_name,
+            nc.serial_number,
+            nc.nursing_name,
+            nc.service_price
+        FROM
+            customernurseitem cni
+                LEFT JOIN customer c on cni.customer_id = c.id
+                LEFT JOIN nursecontent nc on cni.item_id = nc.id
+        <where>
+            <if test="customerId != null">
+                cni.customer_id = #{customerId}
+            </if>
+        </where>
+    </select>
+</mapper>

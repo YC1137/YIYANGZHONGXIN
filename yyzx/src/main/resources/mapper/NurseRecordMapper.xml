@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.yyzx.mapper.NurseRecordMapper">
+    <resultMap id="BaseResultMap" type="com.neuedu.yyzx.pojo.NurseRecord">
+        <id column="id" property="id" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="customer_id" property="customerId" />
+        <result column="item_id" property="itemId" />
+        <result column="nursing_time" property="nursingTime" />
+        <result column="nursing_content" property="nursingContent" />
+        <result column="nursing_count" property="nursingCount" />
+        <result column="user_id" property="userId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, is_deleted, customer_id, item_id, nursing_time, nursing_content, nursing_count, user_id
+    </sql>
+
+    <select id="selectNurseRecordVo" resultType="com.neuedu.yyzx.vo.NurseRecordVo">
+        SELECT
+            n.id,
+            n.is_deleted,
+            n.customer_id,
+            n.item_id,
+            n.nursing_time,
+            n.nursing_content,
+            n.nursing_count,
+            n.user_id,
+            nc.serial_number,
+            nc.nursing_name
+        FROM
+            nurserecord n
+                LEFT JOIN nursecontent nc ON n.item_id = nc.id
+        <where>
+            n.is_deleted = 0
+            <if test="customerId != null and customerId != ''">
+                AND n.customer_id = #{customerId}
+            </if>
+        </where>
+    </select>
+</mapper>

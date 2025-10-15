@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.yyzx.mapper.BackDownMapper">
+    <resultMap id="BaseResultMap" type="com.neuedu.yyzx.pojo.BackDown">
+        <id column="id" property="id" />
+        <result column="remarks" property="remarks" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="customer_id" property="customerId" />
+        <result column="retreattime" property="retreattime" />
+        <result column="retreattype" property="retreattype" />
+        <result column="retreatreason" property="retreatreason" />
+        <result column="auditstatus" property="auditstatus" />
+        <result column="auditperson" property="auditperson" />
+        <result column="audittime" property="audittime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, remarks, is_deleted, customer_id, retreattime, retreattype, retreatreason, auditstatus, auditperson, audittime
+    </sql>
+
+    <select id="selectBackDownVo" resultType="com.neuedu.yyzx.vo.BackDownVo">
+        SELECT
+        bd.id,
+        bd.remarks,
+        bd.is_deleted,
+        bd.customer_id,
+        bd.retreattime,
+        bd.retreattype,
+        bd.retreatreason,
+        bd.auditstatus,
+        bd.auditperson,
+        bd.audittime,
+        b.bed_details,
+        b.bed_id,
+        c.customer_name,
+        c.checkin_date
+        FROM
+        USER u,
+        backdown bd
+        LEFT JOIN customer c ON bd.customer_id = c.id
+        LEFT JOIN bedDetails b ON bd.customer_id = b.customer_id
+        <where>
+            bd.is_deleted = 0
+            <if test="userId != null and userId != ''">
+                AND u.user_id = #{userId}
+            </if>
+        </where>
+    </select>
+</mapper>

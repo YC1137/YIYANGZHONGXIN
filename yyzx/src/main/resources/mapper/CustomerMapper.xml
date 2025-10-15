@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.yyzx.mapper.CustomerMapper">
+
+    <!-- 分页查询客户列表 -->
+    <select id="getUserList" resultType="com.neuedu.yyzx.vo.KhxxCustomerVo">
+        SELECT
+        id,
+        is_deleted,
+        customer_name,
+        customer_age,
+        customer_sex,
+        idcard,
+        room_no,
+        building_no,
+        checkin_date,
+        expiration_date,
+        contact_tel,
+        bed_id,
+        psychosomatic_state,
+        attention,
+        birthday,
+        height,
+        weight,
+        blood_type,
+        filepath,
+        user_id,
+        level_id,
+        family_member
+        FROM
+        customer
+        WHERE
+        is_deleted = 0
+        <if test="roleId != null">
+            AND user_id = #{roleId}
+        </if>
+        <if test="nickname != null and nickname != ''">
+            AND customer_name LIKE CONCAT('%', #{nickname}, '%')
+        </if>
+        LIMIT #{pageSize} OFFSET #{(currentPag - 1) * pageSize}
+    </select>
+
+    <!-- 查询符合条件的客户总数 -->
+    <select id="getUserListCount" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        customer
+        WHERE
+        is_deleted = 0
+        <if test="roleId != null">
+            AND user_id = #{roleId}
+        </if>
+        <if test="nickname != null and nickname != ''">
+            AND customer_name LIKE CONCAT('%', #{nickname}, '%')
+        </if>
+    </select>
+</mapper>
